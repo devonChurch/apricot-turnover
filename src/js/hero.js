@@ -4,19 +4,11 @@ const Background = require('./background');
 
 const Hero = class {
 
-    // build canvas
-    // get color
-    // create...
-    //  - base
-    //  - light  ???
-    //  - dark   ???
-    // animate (requetAnimationFrame)
-
     constructor({color = 340} = {}) {
 
         this.color = color;
-        this.height = 500;
-        this.width = 1000;
+        this.height = 800;
+        this.width = 2000;
         this.ctx = this.generateCanvas();
         this.Helper = new Helper(this);
         this.Background = new Background(this);
@@ -45,8 +37,6 @@ const Hero = class {
     }
 
     clearCanvas() {
-
-        console.log('clear');
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 

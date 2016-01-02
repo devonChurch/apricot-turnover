@@ -23,9 +23,9 @@ const Background = class {
         }
 
         // for debugging....
-        stops[0].hue = 33;
-        stops[1].hue = 200;
-        stops[2].hue = 130;
+        // stops[0].hue = 33;
+        // stops[1].hue = 200;
+        // stops[2].hue = 130;
 
         return stops;
 
@@ -34,8 +34,8 @@ const Background = class {
     generateStop() {
 
         const hue = this.randomiseHue();
-        const saturation = 50; // Randomise at some stage?
-        const luminosity = 50; // Randomise at some stage?
+        const saturation = 100; // Randomise at some stage?
+        const luminosity = this.randomiseLuminosity();
         const alpha = 1;  // Randomise at some stage?
 
         return {hue, saturation, luminosity, alpha};
@@ -44,19 +44,10 @@ const Background = class {
 
     build() {
 
-        // move the rect
-        // if the rect has hit x = 0;
-        //  - then we need to update the color stops
-
         const ctx = this.Hero.ctx;
 
         this.updateStops();
 
-        // ctx.beginPath();
-        // ctx.rect(this.Hero.width * -1, 0, this.Hero.width * 3, this.Hero.height);
-
-
-        // ctx.fillRect(this.Hero.width * -1, 0, this.Hero.width * 3, this.Hero.height);
         ctx.fillRect(0, 0, this.Hero.width, this.Hero.height);
         ctx.fillStyle = this.createGradient();
         ctx.fill();
@@ -65,7 +56,7 @@ const Background = class {
 
     createGradient() {
 
-        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -1, 0, this.Hero.width * 3, 0);
+        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, 0, this.Hero.width * 3, 0);
 
         for (let stop of this.stops) {
 
@@ -84,7 +75,6 @@ const Background = class {
 
         if (this.stops[2].x >= 1) {
 
-            console.log('rearange the color stops!');
             this.reorderStops();
 
         }
@@ -133,7 +123,7 @@ const Background = class {
 
     randomiseHue() {
 
-        const offset = 50;
+        const offset = 25; // += / -= offset
         const max = offset * 2;
         const randomise = this.Hero.Helper.randomise({max});
         let hue = this.Hero.color - offset + randomise;
@@ -142,6 +132,16 @@ const Background = class {
         if (hue < 0) hue = 360 - (hue * -1);
 
         return hue;
+
+    }
+
+    randomiseLuminosity() {
+
+        const offset = 15; // += / -= offset
+        const max = offset * 2;
+        const randomise = this.Hero.Helper.randomise({max});
+
+        return 50 - offset + randomise;
 
     }
 
