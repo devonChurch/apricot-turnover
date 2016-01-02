@@ -5,8 +5,6 @@ const Background = class {
     constructor(Hero) {
 
         this.Hero = Hero;
-        this.width = this.Hero.width * 2;
-        this.x = this.resetX;
         this.stops = this.generateStops();
 
         console.log(this.stops);
@@ -20,8 +18,14 @@ const Background = class {
         for (let i = 0; i < 3; i += 1) {
 
             stops[i] = this.generateStop();
+            this.resetX(stops[i], i);
 
         }
+
+        // for debugging....
+        stops[0].hue = 33;
+        stops[1].hue = 200;
+        stops[2].hue = 130;
 
         return stops;
 
@@ -40,18 +44,20 @@ const Background = class {
 
     build() {
 
-        console.log(`x = ${this.x}`);
-
         // move the rect
         // if the rect has hit x = 0;
         //  - then we need to update the color stops
 
         const ctx = this.Hero.ctx;
-        const reset = this.updateX();
-        // const stops = reset ? 'xxx' : this.stops;
 
-        ctx.beginPath();
-        ctx.rect(this.x, 0, this.width, this.Hero.height);
+        this.updateStops();
+
+        // ctx.beginPath();
+        // ctx.rect(this.Hero.width * -1, 0, this.Hero.width * 3, this.Hero.height);
+
+
+        // ctx.fillRect(this.Hero.width * -1, 0, this.Hero.width * 3, this.Hero.height);
+        ctx.fillRect(0, 0, this.Hero.width, this.Hero.height);
         ctx.fillStyle = this.createGradient();
         ctx.fill();
 
@@ -59,13 +65,12 @@ const Background = class {
 
     createGradient() {
 
-        const stops = this.stops;
-        const grad = this.Hero.ctx.createLinearGradient(0, 0, this.width, 0);
+        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -1, 0, this.Hero.width * 3, 0);
 
-        for (let i = 0; i < 3; i += 1) {
+        for (let stop of this.stops) {
 
-            const hsl = this.produceHsl(stops[i]);
-            grad.addColorStop(i * 0.5, hsl);
+            const hsl = this.produceHsl(stop);
+            grad.addColorStop(stop.x, hsl);
 
         }
 
@@ -75,24 +80,48 @@ const Background = class {
 
     updateStops() {
 
+        this.transitionStops();
+
+        if (this.stops[2].x >= 1) {
+
+            console.log('rearange the color stops!');
+            this.reorderStops();
+
+        }
 
     }
 
-    updateX() {
+    reorderStops() {
 
-        // let x = this.x + 10;
-        // const reset = 0 < x;
-        // this.x = reset ? this.resetX : x;
-        //
-        // return reset;
+        const reorder = [];
 
-        this.x += 10;
+        for (let i = 0; i < 3; i += 1) {
+
+            const stop = this.stops[i - 1] || this.stops[2];
+            reorder[i] = stop;
+            this.resetX(reorder[i], i);
+
+        }
+
+        this.stops = reorder;
 
     }
 
-    get resetX() {
+    resetX(stop, i) {
 
-        return this.Hero.width * -1;
+        const offset = 1 / 3;
+
+        stop.x = i * offset;
+
+    }
+
+    transitionStops() {
+
+        for (let stop of this.stops) {
+
+            stop.x += 0.001;
+
+        }
 
     }
 
