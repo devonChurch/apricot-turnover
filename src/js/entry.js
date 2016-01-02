@@ -1,2 +1,4 @@
 require('../sass/style.scss');
-require('./hero');
+const Hero = require('./hero');
+
+const newDemo = new Hero({color: 200});

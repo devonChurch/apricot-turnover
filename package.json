@@ -11,9 +11,9 @@
     "url": "git+https://github.com/devonChurch/apricot-turnover.git"
   },
   "keywords": [
-    "SVG",
-    "Reversi",
-    "ES6"
+    "Canvas",
+    "HSL",
+    "Animation"
   ],
   "author": "Devon Church",
   "license": "MIT",
