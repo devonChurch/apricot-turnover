@@ -2,11 +2,16 @@ const $ = require('jquery');
 const Helper = require('./helper');
 const Background = require('./background');
 
+// hue: { base = 340, offset = 30 },
+// saturation: { base = 100, offset = 30 },
+// luminosity: { base = 50, offset = 0 },
+// alpha: { base = 1, offset = 0 }
+
 const Hero = class {
 
-    constructor({color = 340} = {}) {
+    constructor(properties = {}) {
 
-        this.color = color;
+        this.properties = properties;
         this.height = 800;
         this.width = 2000;
         this.ctx = this.generateCanvas();

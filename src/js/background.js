@@ -87,7 +87,7 @@ const Background = class {
 
         for (let i = 0; i < 3; i += 1) {
 
-            const stop = this.stops[i - 1] || this.stops[2];
+            const stop = this.stops[i - 1] || this.generateStop();
             reorder[i] = stop;
             this.resetX(reorder[i], i);
 
@@ -123,10 +123,12 @@ const Background = class {
 
     randomiseHue() {
 
-        const offset = 25; // += / -= offset
+        const properties = this.Hero.properties.hue || {};
+        const base = properties.base || 340;
+        const offset = properties.offset || 25; // +/- offset
         const max = offset * 2;
         const randomise = this.Hero.Helper.randomise({max});
-        let hue = this.Hero.color - offset + randomise;
+        let hue = base - offset + randomise;
 
         if (hue > 360) hue = hue - 360;
         if (hue < 0) hue = 360 - (hue * -1);
@@ -135,13 +137,54 @@ const Background = class {
 
     }
 
-    randomiseLuminosity() {
+    randomiseSaturation() {
 
-        const offset = 15; // += / -= offset
+        const properties = this.Hero.properties.saturation || {};
+        const base = properties.base || 90;
+        const offset = properties.offset || 10; // +/- offset
         const max = offset * 2;
         const randomise = this.Hero.Helper.randomise({max});
 
-        return 50 - offset + randomise;
+        let saturation = base - offset + randomise;
+
+        if (saturation > 100) saturation = 100;
+        if (saturation < 0) saturation = 0;
+
+        return saturation;
+
+    }
+
+    randomiseLuminosity() {
+
+        const properties = this.Hero.properties.luminosity || {};
+        const base = properties.base || 50;
+        const offset = properties.offset || 0; // +/- offset
+        const max = offset * 2;
+        const randomise = this.Hero.Helper.randomise({max});
+
+        let luminosity = base - offset + randomise;
+
+        if (luminosity > 100) luminosity = 100;
+        if (luminosity < 0) luminosity = 0;
+
+        return luminosity;
+
+    }
+
+    randomiseAlpha() {
+
+        const properties = this.Hero.properties.alpha || {};
+        const base = properties.base || 1;
+        const offset = properties.offset || 0; // +/- offset
+        const max = offset * 2;
+        const randomise = this.Hero.Helper.randomise({max});
+
+        let alpha = base - offset + randomise;
+
+        if (alpha > 1) alpha = 1;
+        if (alpha < 0) alpha = 0;
+
+        return alpha;
 
     }
 
