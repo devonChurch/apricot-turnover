@@ -1,6 +1,7 @@
 const $ = require('jquery');
 const Helper = require('./helper');
 const Background = require('./background');
+const Glare = require('./glare');
 
 // hue: { base = 340, offset = 30 },
 // saturation: { base = 100, offset = 30 },
@@ -12,11 +13,24 @@ const Hero = class {
     constructor(properties = {}) {
 
         this.properties = properties;
+        this.$wrapper = $('#hero');
         this.height = 800;
         this.width = 2000;
         this.ctx = this.generateCanvas();
         this.Helper = new Helper(this);
         this.Background = new Background(this);
+        this.Glare = [
+            new Glare(this, {
+                anchor: {x: 0, y: this.height}, // x, y
+                horizontal : {min: this.width, max: this.width * 1.5}, // min, max
+                vertical: {min: this.height * -0.5, max: this.height * 0.5} // min, max
+            }),
+            new Glare(this, {
+                anchor: {x: this.width, y: this.height}, // x, y
+                horizontal : {min: 0, max: this.width * 0.5}, // min, max
+                vertical: {min: this.height * 0.75, max: this.height * 0.25} // min, max
+            })
+        ];
 
         this.animate();
 
@@ -24,9 +38,9 @@ const Hero = class {
 
     generateCanvas() {
 
-        const $canvas = $(`<canvas class="hero" height="${this.height}" width="${this.width}" />`);
+        const $canvas = $(`<canvas class="hero__canvas" height="${this.height}" width="${this.width}" />`);
 
-        $('body').append($canvas);
+        this.$wrapper.prepend($canvas);
 
         return $canvas[0].getContext('2d');
 
@@ -36,6 +50,8 @@ const Hero = class {
 
         this.clearCanvas();
         this.Background.build();
+
+        for (let glare of this.Glare) { glare.build(); }
 
         requestAnimationFrame(() => this.animate());
 
