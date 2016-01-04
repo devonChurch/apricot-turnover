@@ -1,56 +1,65 @@
 const $ = require('jquery');
+const Ray = require('./ray');
 
 const Glare = class {
 
-    constructor(Hero, properties) {
+    constructor(Hero) {
 
         // anchor = 0 / width
         // x = 123, 456
         // y = 123, 456
 
+        // single triangle starts fro the bottom and moves up
+        // as it gets higher it looses opacity
+        // when it reaches 75% or its lifecycle we create another triangle traveling up but flipped in teh y-axis
+
+        //
+
         this.Hero = Hero;
-        this.anchor = properties.anchor;
-        this.horizontal = properties.horizontal;
-        this.vertical = properties.vertical;
-        this.x = this.randomiseX();
-        this.y = this.randomiseY();
-
-        console.log('');
-        console.log(this.anchor.x, this.anchor.y);
-        console.log(this.anchor.x, this.y);
-        console.log(this.x, this.anchor.y);
+        this.instances = [];
+        this.frequency = 300;
+        this.i = 0; // Animation duration
+        this.j = 0; // Ray orientation
+        this.createRay();
 
     }
 
-    build() {
+    animate() {
 
-        const ctx = this.Hero.ctx;
+        this.queryDuration();
 
-        ctx.beginPath();
-        ctx.moveTo(this.anchor.x, this.anchor.y);
-        ctx.lineTo(this.anchor.x, this.y);
-        ctx.lineTo(this.x, this.anchor.y);
-        ctx.lineTo(this.anchor.x, this.anchor.y);
-        ctx.strokeStyle = 'hotpink';
-        ctx.stroke();
+        // console.log(this.instances);
+
+        for (let instance of this.instances) { instance.build(); }
 
     }
 
-    randomiseX() {
+    queryDuration() {
 
-        const min = this.horizontal.min;
-        const max = this.horizontal.max;
+        this.i += 1;
 
-        return this.Hero.Helper.randomise({min, max});
+        if (this.i > this.frequency) {
+
+            this.i = 0;
+            this.createRay();
+
+        }
 
     }
 
-    randomiseY() {
+    createRay() {
 
-        const min = this.vertical.min;
-        const max = this.vertical.max;
+        const orientation = this.j % 2 ? 'left' : 'right';
+        const ray = new Ray(this.Hero, this, orientation);
 
-        return this.Hero.Helper.randomise({min, max});
+        this.instances.push(ray);
+        this.j += 1;
+
+    }
+
+    destroyRay() {
+
+        this.instances.shift();
 
     }
 

@@ -16,6 +16,12 @@ const Helper = class {
 
 	}
 
+    get boolean() {
+
+        return this.randomise({max: 1}) % 2 === 0 ? false : true;
+
+    }
+
 };
 
 module.exports = Helper;

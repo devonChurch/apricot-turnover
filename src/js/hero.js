@@ -8,6 +8,19 @@ const Glare = require('./glare');
 // luminosity: { base = 50, offset = 0 },
 // alpha: { base = 1, offset = 0 }
 
+// this.Glare = [
+//     new Glare(this, {
+//         anchor: {x: 0, y: this.height}, // x, y
+//         horizontal : {min: this.width, max: this.width * 1.5}, // min, max
+//         vertical: {min: this.height * -0.5, max: this.height * 0.5} // min, max
+//     }),
+//     new Glare(this, {
+//         anchor: {x: this.width, y: this.height}, // x, y
+//         horizontal : {min: 0, max: this.width * 0.5}, // min, max
+//         vertical: {min: this.height * 0.75, max: this.height * 0.25} // min, max
+//     })
+// ];
+
 const Hero = class {
 
     constructor(properties = {}) {
@@ -19,18 +32,7 @@ const Hero = class {
         this.ctx = this.generateCanvas();
         this.Helper = new Helper(this);
         this.Background = new Background(this);
-        this.Glare = [
-            new Glare(this, {
-                anchor: {x: 0, y: this.height}, // x, y
-                horizontal : {min: this.width, max: this.width * 1.5}, // min, max
-                vertical: {min: this.height * -0.5, max: this.height * 0.5} // min, max
-            }),
-            new Glare(this, {
-                anchor: {x: this.width, y: this.height}, // x, y
-                horizontal : {min: 0, max: this.width * 0.5}, // min, max
-                vertical: {min: this.height * 0.75, max: this.height * 0.25} // min, max
-            })
-        ];
+        this.Glare = new Glare(this);
 
         this.animate();
 
@@ -50,8 +52,7 @@ const Hero = class {
 
         this.clearCanvas();
         this.Background.build();
-
-        for (let glare of this.Glare) { glare.build(); }
+        this.Glare.animate();
 
         requestAnimationFrame(() => this.animate());
 

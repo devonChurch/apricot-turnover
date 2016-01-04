@@ -48,9 +48,11 @@ const Background = class {
 
         this.updateStops();
 
-        ctx.fillRect(0, 0, this.Hero.width, this.Hero.height);
+        ctx.beginPath();
+        ctx.rect(0, 0, this.Hero.width, this.Hero.height);
         ctx.fillStyle = this.createGradient();
         ctx.fill();
+        ctx.closePath();
 
     }
 
