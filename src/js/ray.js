@@ -56,6 +56,7 @@ const Ray = class {
     get lightProperties() {
 
         return {
+            blend: 'overlay',
             luminosity: 100,
             alpha: 0.2, // 0.066,
             x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
@@ -67,6 +68,7 @@ const Ray = class {
     get darkProperties() {
 
         return {
+            blend: 'overlay',
             luminosity: 0,
             alpha: 0.1, // 0.033,
             x: this.light.x,
@@ -78,7 +80,6 @@ const Ray = class {
     get lightModifiers() {
 
         return {
-            blend: 'overlay',
             x: 1,
             y: 0.5
         };
@@ -88,7 +89,6 @@ const Ray = class {
     get darkModifiers() {
 
         return {
-            blend: 'overlay',
             x: -0.5,
             y: 1
         };

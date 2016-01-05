@@ -60,7 +60,7 @@ const Background = class {
 
     createGradient() {
 
-        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, this.Hero.height, this.Hero.width * 3, 0);
+        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, 0, this.Hero.width * 3, 0);
 
         for (let stop of this.stops) {
 
