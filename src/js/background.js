@@ -34,9 +34,9 @@ const Background = class {
     generateStop() {
 
         const hue = this.randomiseHue();
-        const saturation = 100; // Randomise at some stage?
+        const saturation = this.randomiseSaturation();
         const luminosity = this.randomiseLuminosity();
-        const alpha = 1;  // Randomise at some stage?
+        const alpha = this.randomiseAlpha();
 
         return {hue, saturation, luminosity, alpha};
 
@@ -48,6 +48,7 @@ const Background = class {
 
         this.updateStops();
 
+        ctx.globalAlpha = 1;
         ctx.beginPath();
         ctx.rect(0, 0, this.Hero.width, this.Hero.height);
         ctx.fillStyle = this.createGradient();

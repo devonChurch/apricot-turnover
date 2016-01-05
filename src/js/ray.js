@@ -20,6 +20,7 @@ const Ray = class {
         this.Glare = Glare;
         this.orientation = orientation;
         this.anchor = orientation === 'left' ? 0 : this.Hero.width;
+        this.alpha = 1;
         this.light = this.lightProperties;
         this.dark = this.darkProperties;
 
@@ -27,10 +28,17 @@ const Ray = class {
 
     build() {
 
-        this.drawRay('dark');
-        this.drawRay('light');
+        if (this.alpha < 0) {
 
-        console.log(this.light.alpha);
+            this.Glare.destroyRay();
+
+        } else {
+
+            this.Hero.ctx.globalAlpha = this.alpha -= 0.0005;
+            this.drawRay('dark');
+            this.drawRay('light');
+
+        }
 
     }
 
@@ -39,27 +47,16 @@ const Ray = class {
         const ctx = this.Hero.ctx;
         const modifier = this[`${type}Modifiers`];
 
-        if (this[type].alpha < 0) {
+        this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
+        this[type].y -= modifier.y;
 
-            console.log('DESTROY!!!');
-
-            this.Glare.destroyRay();
-
-        } else {
-
-            this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
-            this[type].y -= modifier.y;
-            this[type].alpha -= modifier.alpha;
-
-            ctx.beginPath();
-            ctx.moveTo(this.anchor, this.Hero.height);
-            ctx.lineTo(this.anchor, this[type].y);
-            ctx.lineTo(this[type].x, this.Hero.height);
-            ctx.fillStyle = `hsla(0, 0%, ${this[type].luminosity}%, ${this[type].alpha})`;
-            ctx.fill();
-            ctx.closePath();
-
-        }
+        ctx.beginPath();
+        ctx.moveTo(this.anchor, this.Hero.height);
+        ctx.lineTo(this.anchor, this[type].y);
+        ctx.lineTo(this[type].x, this.Hero.height);
+        ctx.fillStyle = `hsla(0, 0%, ${this[type].luminosity}%, ${this[type].alpha})`;
+        ctx.fill();
+        ctx.closePath();
 
     }
 
@@ -67,7 +64,7 @@ const Ray = class {
 
         return {
             luminosity: 100,
-            alpha: 0.066,
+            alpha: 0.06,
             x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
             y: this.Hero.height
         };
@@ -78,7 +75,7 @@ const Ray = class {
 
         return {
             luminosity: 0,
-            alpha: 0.033,
+            alpha: 0.03,
             x: this.light.x,
             y: this.Hero.height
         };
@@ -88,9 +85,9 @@ const Ray = class {
     get lightModifiers() {
 
         return {
-            alpha: this.light.alpha / (this.Glare.frequency * 1.5), // 0, // 0.001,
+            // alpha: this.light.alpha / (this.Glare.frequency * 1.5), // 0, // 0.001,
             x: 1,
-            y: 0.7
+            y: 0.5
         };
 
     }
@@ -98,8 +95,8 @@ const Ray = class {
     get darkModifiers() {
 
         return {
-            alpha: this.dark.alpha / (this.Glare.frequency * 1.5), // 0, // 0.002,
-            x: 0.7,
+            // alpha: this.dark.alpha / (this.Glare.frequency * 1.5), // 0, // 0.002,
+            x: 1,
             y: 1
         };
 
@@ -107,10 +104,8 @@ const Ray = class {
 
     randomiseX() {
 
-        // const x = anchor > 0 ? this.Hero.width - this.randomiseX() : this.randomiseX();
-
-        const min = this.Hero.width * 0.5;
-        const max = this.Hero.width * 1.5;
+        const min = this.Hero.width * 0.25;
+        const max = this.Hero.width; // * 2;
 
         return this.Hero.Helper.randomise({min, max});
 

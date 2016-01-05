@@ -22,6 +22,17 @@ const Helper = class {
 
     }
 
+    round({value, decimalPlace = 1}) {
+
+        let round = '1';
+
+        for (let i = 0; i < decimalPlace; i += 1) round += '0';
+        round = parseInt(round, 10);
+
+        return Math.round(value * round) / round;
+
+    }
+
 };
 
 module.exports = Helper;
