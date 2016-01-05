@@ -42,9 +42,7 @@ const Ray = class {
         this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
         this[type].y -= modifier.y;
 
-        // this[type].alpha -= modifier.alpha;
-        // this[type].alpha = this.Hero.Helper.round({value: this[type].alpha, decimalPlace: 6});
-
+        ctx.globalCompositeOperation = this[type].blend;
         ctx.beginPath();
         ctx.moveTo(this.anchor, this.Hero.height);
         ctx.lineTo(this.anchor, this[type].y);
@@ -59,7 +57,7 @@ const Ray = class {
 
         return {
             luminosity: 100,
-            alpha: 0.066,
+            alpha: 0.2, // 0.066,
             x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
             y: this.Hero.height
         };
@@ -70,7 +68,7 @@ const Ray = class {
 
         return {
             luminosity: 0,
-            alpha: 0.033,
+            alpha: 0.1, // 0.033,
             x: this.light.x,
             y: this.Hero.height
         };
@@ -80,6 +78,7 @@ const Ray = class {
     get lightModifiers() {
 
         return {
+            blend: 'overlay',
             x: 1,
             y: 0.5
         };
@@ -89,7 +88,8 @@ const Ray = class {
     get darkModifiers() {
 
         return {
-            x: 0.5,
+            blend: 'overlay',
+            x: -0.5,
             y: 1
         };
 

@@ -49,6 +49,7 @@ const Background = class {
         this.updateStops();
 
         // ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
         ctx.beginPath();
         ctx.rect(0, 0, this.Hero.width, this.Hero.height);
         ctx.fillStyle = this.createGradient();
