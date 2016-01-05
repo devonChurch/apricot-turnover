@@ -27,6 +27,7 @@ const Glare = class {
     animate() {
 
         this.queryDuration();
+        this.queryDistruction();
         for (let instance of this.instances) instance.build();
 
     }
@@ -54,13 +55,9 @@ const Glare = class {
 
     }
 
-    destroyRay() {
+    queryDistruction() {
 
-        console.log('DESTROY!!!');
-
-        this.instances.shift();
-
-        console.log(this.instances);
+        if (this.instances[0].alpha < 0) this.instances.shift();
 
     }
 

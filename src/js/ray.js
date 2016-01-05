@@ -28,17 +28,9 @@ const Ray = class {
 
     build() {
 
-        if (this.alpha < 0) {
-
-            this.Glare.destroyRay();
-
-        } else {
-
-            this.Hero.ctx.globalAlpha = this.alpha -= 0.0005;
-            this.drawRay('dark');
-            this.drawRay('light');
-
-        }
+        this.alpha -= 0.001;
+        this.drawRay('dark');
+        this.drawRay('light');
 
     }
 
@@ -50,11 +42,14 @@ const Ray = class {
         this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
         this[type].y -= modifier.y;
 
+        // this[type].alpha -= modifier.alpha;
+        // this[type].alpha = this.Hero.Helper.round({value: this[type].alpha, decimalPlace: 6});
+
         ctx.beginPath();
         ctx.moveTo(this.anchor, this.Hero.height);
         ctx.lineTo(this.anchor, this[type].y);
         ctx.lineTo(this[type].x, this.Hero.height);
-        ctx.fillStyle = `hsla(0, 0%, ${this[type].luminosity}%, ${this[type].alpha})`;
+        ctx.fillStyle = `hsla(0, 0%, ${this[type].luminosity}%, ${this.alpha * this[type].alpha})`;
         ctx.fill();
         ctx.closePath();
 
@@ -64,7 +59,7 @@ const Ray = class {
 
         return {
             luminosity: 100,
-            alpha: 0.06,
+            alpha: 0.066,
             x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
             y: this.Hero.height
         };
@@ -75,7 +70,7 @@ const Ray = class {
 
         return {
             luminosity: 0,
-            alpha: 0.03,
+            alpha: 0.033,
             x: this.light.x,
             y: this.Hero.height
         };
@@ -85,7 +80,6 @@ const Ray = class {
     get lightModifiers() {
 
         return {
-            // alpha: this.light.alpha / (this.Glare.frequency * 1.5), // 0, // 0.001,
             x: 1,
             y: 0.5
         };
@@ -95,8 +89,7 @@ const Ray = class {
     get darkModifiers() {
 
         return {
-            // alpha: this.dark.alpha / (this.Glare.frequency * 1.5), // 0, // 0.002,
-            x: 1,
+            x: 0.5,
             y: 1
         };
 

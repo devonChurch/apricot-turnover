@@ -3,5 +3,5 @@ const Hero = require('./hero');
 
 const newDemo = new Hero({
     // canvas size!!!!
-    hue: { base: 200, offset: 50 }
+    hue: { base: 0, offset: 180 }
 });

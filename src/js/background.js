@@ -48,7 +48,7 @@ const Background = class {
 
         this.updateStops();
 
-        ctx.globalAlpha = 1;
+        // ctx.globalAlpha = 1;
         ctx.beginPath();
         ctx.rect(0, 0, this.Hero.width, this.Hero.height);
         ctx.fillStyle = this.createGradient();
@@ -59,7 +59,7 @@ const Background = class {
 
     createGradient() {
 
-        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, 0, this.Hero.width * 3, 0);
+        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, this.Hero.height, this.Hero.width * 3, 0);
 
         for (let stop of this.stops) {
 
