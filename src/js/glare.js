@@ -3,7 +3,7 @@ const Ray = require('./ray');
 
 const Glare = class {
 
-    constructor(Hero) {
+    constructor(Hero, properties) {
 
         // anchor = 0 / width
         // x = 123, 456
@@ -16,8 +16,11 @@ const Glare = class {
         //
 
         this.Hero = Hero;
+        this.properties = properties;
         this.instances = [];
-        this.frequency = 300;
+        this.frequency = this.calculateFrequecy(); // properties.frequency / 100 * this.Hero.height;
+        this.depreciation = this.calculateDepreciation();
+        console.log(this.depreciation);
         this.i = 0; // Animation duration
         this.j = 0; // Ray orientation
         this.createRay();
@@ -38,10 +41,30 @@ const Glare = class {
 
         if (this.i > this.frequency) {
 
+            console.log('Creating new Ray instance');
+
             this.i = 0;
             this.createRay();
 
         }
+
+    }
+
+    calculateFrequecy() {
+
+        const frequency = this.properties.frequency || 30;
+
+        return this.Hero.Helper.findPercentage({percentage: frequency, of: this.Hero.height});
+
+    }
+
+    calculateDepreciation() {
+
+        const lifecycle = this.properties.lifecycle || 100;
+        const distance = this.Hero.Helper.findPercentage({percentage: lifecycle, of: this.Hero.height});
+        const alpha = 1;
+
+        return alpha / distance;
 
     }
 

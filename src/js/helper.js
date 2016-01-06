@@ -33,6 +33,12 @@ const Helper = class {
 
     }
 
+    findPercentage({percentage, of}) {
+
+        return percentage / 100 * of;
+
+    }
+
 };
 
 module.exports = Helper;

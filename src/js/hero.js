@@ -23,28 +23,27 @@ const Glare = require('./glare');
 
 const Hero = class {
 
-    constructor(properties = {}) {
+    constructor({height = 500, width = 1000, background, glare} = {}) {
 
-        this.properties = properties;
         this.$wrapper = $('#hero');
-        this.height = 800;
-        this.width = 2000;
-        this.ctx = this.generateCanvas();
+        this.height = height;
+        this.width = width;
+        this.$canvas = this.injectCanvas();
+        this.ctx = this.$canvas[0].getContext('2d');
         this.Helper = new Helper(this);
-        this.Background = new Background(this);
-        this.Glare = new Glare(this);
-
+        this.Background = new Background(this, background);
+        this.Glare = new Glare(this, glare);
         this.animate();
 
     }
 
-    generateCanvas() {
+    injectCanvas() {
 
         const $canvas = $(`<canvas class="hero__canvas" height="${this.height}" width="${this.width}" />`);
 
         this.$wrapper.prepend($canvas);
 
-        return $canvas[0].getContext('2d');
+        return $canvas;
 
     }
 
@@ -63,6 +62,18 @@ const Hero = class {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
     }
+
+    // updateCanvas({height = this.height, width = this.width} = {}) {
+    //
+    //     this.height = height;
+    //     this.width = width;
+    //
+    //     this.$canvas.attr({
+    //         height: height,
+    //         width: width
+    //     });
+    //
+    // }
 
 };
 

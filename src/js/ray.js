@@ -4,8 +4,6 @@ const Ray = class {
 
     constructor(Hero, Glare, orientation) {
 
-        console.log('Creating new Ray instance');
-
         // API = Glare - Frequency & Opacity
 
         // anchor = 0 / width
@@ -28,7 +26,7 @@ const Ray = class {
 
     build() {
 
-        this.alpha -= 0.001;
+        this.alpha -= this.Glare.depreciation; // 0.001;
         this.drawRay('dark');
         this.drawRay('light');
 
@@ -58,7 +56,7 @@ const Ray = class {
         return {
             blend: 'overlay',
             luminosity: 100,
-            alpha: 0.2, // 0.066,
+            alpha: 0.2,
             x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
             y: this.Hero.height
         };
@@ -70,7 +68,7 @@ const Ray = class {
         return {
             blend: 'overlay',
             luminosity: 0,
-            alpha: 0.1, // 0.033,
+            alpha: 0.1,
             x: this.light.x,
             y: this.Hero.height
         };
@@ -98,7 +96,7 @@ const Ray = class {
     randomiseX() {
 
         const min = this.Hero.width * 0.25;
-        const max = this.Hero.width; // * 2;
+        const max = this.Hero.width;
 
         return this.Hero.Helper.randomise({min, max});
 

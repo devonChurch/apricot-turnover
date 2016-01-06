@@ -2,9 +2,10 @@ const $ = require('jquery');
 
 const Background = class {
 
-    constructor(Hero) {
+    constructor(Hero, properties) {
 
         this.Hero = Hero;
+        this.properties = properties;
         this.stops = this.generateStops();
 
         console.log(this.stops);
@@ -127,7 +128,7 @@ const Background = class {
 
     randomiseHue() {
 
-        const properties = this.Hero.properties.hue || {};
+        const properties = this.properties.hue || {};
         const base = properties.base || 340;
         const offset = properties.offset || 25; // +/- offset
         const max = offset * 2;
@@ -143,7 +144,7 @@ const Background = class {
 
     randomiseSaturation() {
 
-        const properties = this.Hero.properties.saturation || {};
+        const properties = this.properties.saturation || {};
         const base = properties.base || 90;
         const offset = properties.offset || 10; // +/- offset
         const max = offset * 2;
@@ -160,7 +161,7 @@ const Background = class {
 
     randomiseLuminosity() {
 
-        const properties = this.Hero.properties.luminosity || {};
+        const properties = this.properties.luminosity || {};
         const base = properties.base || 50;
         const offset = properties.offset || 0; // +/- offset
         const max = offset * 2;
@@ -177,7 +178,7 @@ const Background = class {
 
     randomiseAlpha() {
 
-        const properties = this.Hero.properties.alpha || {};
+        const properties = this.properties.alpha || {};
         const base = properties.base || 1;
         const offset = properties.offset || 0; // +/- offset
         const max = offset * 2;
