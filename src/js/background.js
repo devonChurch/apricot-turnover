@@ -2,17 +2,39 @@ const $ = require('jquery');
 
 const Background = class {
 
+    // 0 ------------> 1 ------------> 2 ------------->
+    //
+    // *---------------*---------------*---------------*
+    // |  Hidden Left  |  Canvas Area  |  Hidden Right |
+    // *---------------*---------------*---------------*
+    //
+    // The background of the canvas is depicted by a gradient travelling
+    // horizontally from left to right. The gradient is made up of 3 color stops
+    // with the distance between two stops equaling the width of the canvas
+    // (this makes the gradient 3x of the canvas width).
+    //
+    // During the animation the gradient itself does not travel at all - instead
+    // we offset each color stop between the 0 —> 1 offset span. i.e color stop...
+    // zero travels 0 —> 0.33
+    // one travels 0.33 —> 0.66
+    // two travels 0.66 —> 1.
+    //
+    // Once the color stops reach the end of their max offset they transfer
+    // their values to the next color stop with the end stop (#2) moving down to
+    // the (#0) color stop allocation (and generates a new random color). This
+    // creates the infinite loop.
+
     constructor(Hero, properties) {
 
         this.Hero = Hero;
         this.properties = properties;
         this.stops = this.generateStops();
 
-        console.log(this.stops);
-
     }
 
     generateStops() {
+
+        // Build out the initial three random stop values (#0, #1, #2),
 
         const stops = [];
 
@@ -23,16 +45,14 @@ const Background = class {
 
         }
 
-        // for debugging....
-        // stops[0].hue = 33;
-        // stops[1].hue = 200;
-        // stops[2].hue = 130;
-
         return stops;
 
     }
 
     generateStop() {
+
+        // Randomises a hsla color based on the given parameters on
+        // initialisation.
 
         const hue = this.randomiseHue();
         const saturation = this.randomiseSaturation();
@@ -45,11 +65,14 @@ const Background = class {
 
     build() {
 
+        // Builds the gradient with its persistent values kept throughout the
+        // animation and injects it onto the canvas.
+
         const ctx = this.Hero.ctx;
 
         this.updateStops();
 
-        // ctx.globalAlpha = 1;
+        // Resets the blends mode to default.
         ctx.globalCompositeOperation = 'source-over';
         ctx.beginPath();
         ctx.rect(0, 0, this.Hero.width, this.Hero.height);
@@ -60,6 +83,9 @@ const Background = class {
     }
 
     createGradient() {
+
+        // Builds out the gradients color stops with their current x offset and
+        // centres the gradient on the canvas.
 
         const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, 0, this.Hero.width * 3, 0);
 
@@ -76,6 +102,10 @@ const Background = class {
 
     updateStops() {
 
+        // Checks to see if the last stop in the gradient sequence (stop #2) has
+        // reached its max value (1.0) and if so then we need to loop the stops
+        // to continue gradient transition.
+
         this.transitionStops();
 
         if (this.stops[2].x >= 1) {
@@ -87,6 +117,9 @@ const Background = class {
     }
 
     reorderStops() {
+
+        // Moves all color stops in the gradient forward one spot and resetting
+        // the old last stop (#2) to be the new first (#0).
 
         const reorder = [];
 
@@ -104,6 +137,9 @@ const Background = class {
 
     resetX(stop, i) {
 
+        // Gives each of the three color stops its initial starting point for
+        // the animation.
+
         const offset = 1 / 3;
 
         stop.x = i * offset;
@@ -111,6 +147,8 @@ const Background = class {
     }
 
     transitionStops() {
+
+        // Move the gradient stops forward each animation tick.
 
         for (let stop of this.stops) {
 
@@ -122,18 +160,27 @@ const Background = class {
 
     produceHsl(p) {
 
+        // Turns the current hsla properties into a usable value.
+
         return `hsla(${p.hue}, ${p.saturation}%, ${p.luminosity}%, ${p.alpha})`;
 
     }
+
+    // The following randomise functions create the random aspects of the hsla
+    // properties either passed in by the user or from the default fallback
+    // values.
 
     randomiseHue() {
 
         const properties = this.properties.hue || {};
         const base = properties.base || 340;
-        const offset = properties.offset || 25; // +/- offset
+        const offset = properties.offset || 50; // +/- offset
         const max = offset * 2;
         const randomise = this.Hero.Helper.randomise({max});
         let hue = base - offset + randomise;
+
+        // Note: we do not put a hard stop to the min and max values - instead
+        // we loop back around and the hue scale is seamless.
 
         if (hue > 360) hue = hue - 360;
         if (hue < 0) hue = 360 - (hue * -1);
@@ -145,8 +192,8 @@ const Background = class {
     randomiseSaturation() {
 
         const properties = this.properties.saturation || {};
-        const base = properties.base || 90;
-        const offset = properties.offset || 10; // +/- offset
+        const base = properties.base || 80;
+        const offset = properties.offset || 20; // +/- offset
         const max = offset * 2;
         const randomise = this.Hero.Helper.randomise({max});
 
@@ -163,7 +210,7 @@ const Background = class {
 
         const properties = this.properties.luminosity || {};
         const base = properties.base || 50;
-        const offset = properties.offset || 0; // +/- offset
+        const offset = properties.offset || 10; // +/- offset
         const max = offset * 2;
         const randomise = this.Hero.Helper.randomise({max});
 

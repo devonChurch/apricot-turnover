@@ -1,5 +1,4 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     context: __dirname + '/src/js',
@@ -12,12 +11,10 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             { from:  '../index.html', to: 'index.html' }
-        ]),
-        new ExtractTextPlugin('style.css')
+        ])
     ],
     module: {
         loaders: [
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css?sourceMap!autoprefixer?browsers=last 2 versions!sass') },
             { test: /\.js$/, exclude: /node_modules/, loader: 'babel!eslint'} // Automatically generates source maps without the sourceMaps config
         ]
     },

@@ -4,16 +4,6 @@ const Ray = class {
 
     constructor(Hero, Glare, orientation) {
 
-        // API = Glare - Frequency & Opacity
-
-        // anchor = 0 / width
-        // x = 123, 456
-        // y = 123, 456
-
-        // single triangle starts fro the bottom and moves up
-        // as it gets higher it looses opacity
-        // when it reaches 75% or its lifecycle we create another triangle traveling up but flipped in teh y-axis
-
         this.Hero = Hero;
         this.Glare = Glare;
         this.orientation = orientation;
@@ -26,7 +16,12 @@ const Ray = class {
 
     build() {
 
-        this.alpha -= this.Glare.depreciation; // 0.001;
+        // Each Ray instance is made up of a light and dark triangle which are
+        // controlled independently of each other during their animation. During
+        // each build cycle we modify the triangles x / y-axis value as well as
+        // decrease their alpha until they can be ultimately destroyed.
+
+        this.alpha -= this.Glare.depreciation;
         this.drawRay('dark');
         this.drawRay('light');
 
@@ -34,12 +29,25 @@ const Ray = class {
 
     drawRay(type) {
 
+        // Each ray triangle (light / dark) has its own modifier setup.
+        //
+        // From a motion standpoint we want to create overlap between the two
+        // variations - we therefore set the x value of the dark triangle to
+        // invert and the y value to greatly increate over its light counterpart.
+        //
+        // Aesthetically, we fade each variation out with a ratio that will have
+        // them hit zero at the same time even though their starting alpha
+        // values differ. We also have an independent blend mode for each
+        // instance that play to the light / dark strengths and their
+        // relationship to the underlying colors.
+
         const ctx = this.Hero.ctx;
         const modifier = this[`${type}Modifiers`];
 
         this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
         this[type].y -= modifier.y;
 
+        // Sets the blend mode.
         ctx.globalCompositeOperation = this[type].blend;
         ctx.beginPath();
         ctx.moveTo(this.anchor, this.Hero.height);
@@ -66,9 +74,9 @@ const Ray = class {
     get darkProperties() {
 
         return {
-            blend: 'overlay',
+            blend: 'multiply',
             luminosity: 0,
-            alpha: 0.1,
+            alpha: 0.07,
             x: this.light.x,
             y: this.Hero.height
         };
