@@ -4,7 +4,8 @@ A hero module using procedural color transitions.
 
 ## Demo
 
-[Click here](http://codepen.io/DevonChurch/full/XXNqWE/)
+[Demo (Text)](http://codepen.io/DevonChurch/full/NxpmYN/)
+[Demo (Hero)](http://codepen.io/DevonChurch/full/vLmXzM/)
 
 ## Installation
 
@@ -33,13 +34,13 @@ There are a variety of values you can pass into the initialiser to customise the
 - This will generate the canvas using all default values.
 
 ```javascript
-const default = new apricotTurnover();
+const default = new ApricotTurnover();
 ```
 
 - This will generate a customised canvas (remember that you can leave any parameter blank). Below are the default values baked into the code.
 
 ```javascript
-const default = new apricotTurnover({
+const custom = new ApricotTurnover({
     // Element to append the generated canvas to.
 	$wrapper: $('#apricot-turnover'),
     // Canvas dimensions.

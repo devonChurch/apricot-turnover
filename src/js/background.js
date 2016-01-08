@@ -29,6 +29,7 @@ const Background = class {
         this.Hero = Hero;
         this.properties = properties;
         this.speed = this.calculateSpeed();
+        console.log(this.speed);
         this.stops = this.generateStops();
 
     }

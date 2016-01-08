@@ -13,6 +13,28 @@ const Glare = class {
         this.i = 0; // Creation frequency
         this.j = 0; // Ray orientation
         this.createRay();
+        this.fastForward();
+
+    }
+
+    fastForward() {
+
+        // When the canvas in first initialised and injected into the DOM there
+        // are no Glare instances visible. Over time they populate the canvas
+        // area based on their frequency and lifespan parameters. In order to
+        // have an typical number of Gare instances on page load we “fast
+        // forward” the animation loop on the Glare timeline before beginning
+        // the true animation sequence managed via the requestAnimationFrame()
+        // API.
+
+        // Build 5 Glare instances.
+        const length = this.frequency * 5;
+
+        for (let i = 0; i < length; i += 1) {
+
+            this.animate();
+
+        }
 
     }
 
