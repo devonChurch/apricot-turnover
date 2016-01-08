@@ -4,8 +4,8 @@ A hero module using procedural color transitions.
 
 ## Demo
 
-[Demo (Text)](http://codepen.io/DevonChurch/full/NxpmYN/)
-[Demo (Hero)](http://codepen.io/DevonChurch/full/vLmXzM/)
+- [Demo (Text)](http://codepen.io/DevonChurch/full/NxpmYN/)
+- [Demo (Hero)](http://codepen.io/DevonChurch/full/vLmXzM/)
 
 ## Installation
 
