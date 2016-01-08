@@ -26,7 +26,7 @@ const Hero = class {
 
         const $canvas = $(`<canvas class="apricot-turnover" height="${this.height}" width="${this.width}" />`);
 
-        this.$wrapper.prepend($canvas);
+        this.$wrapper.append($canvas);
 
         return $canvas;
 

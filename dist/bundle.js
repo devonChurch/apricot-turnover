@@ -101,9 +101,9 @@
 	            // Place the canvas into the DOM inside the stipulated wrapper element
 	            // or the default location.
 	
-	            var $canvas = $('<canvas class="hero__canvas" height="' + this.height + '" width="' + this.width + '" />');
+	            var $canvas = $('<canvas class="apricot-turnover" height="' + this.height + '" width="' + this.width + '" />');
 	
-	            this.$wrapper.prepend($canvas);
+	            this.$wrapper.append($canvas);
 	
 	            return $canvas;
 	        }
@@ -9460,6 +9460,7 @@
 	
 	        this.Hero = Hero;
 	        this.properties = properties;
+	        this.speed = this.calculateSpeed();
 	        this.stops = this.generateStops();
 	    }
 	
@@ -9594,6 +9595,17 @@
 	            stop.x = i * offset;
 	        }
 	    }, {
+	        key: 'calculateSpeed',
+	        value: function calculateSpeed() {
+	
+	            // We take the users percentage based speed value and generate a
+	            // reference that relates to the color stop offset for a canvas gradient.
+	
+	            var speed = this.properties.speed || 100;
+	
+	            return this.Hero.Helper.findPercentage({ percentage: speed, of: 0.001 });
+	        }
+	    }, {
 	        key: 'transitionStops',
 	        value: function transitionStops() {
 	
@@ -9607,7 +9619,7 @@
 	                for (var _iterator2 = this.stops[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                    var _stop3 = _step2.value;
 	
-	                    _stop3.x += 0.001;
+	                    _stop3.x += this.speed;
 	                }
 	            } catch (err) {
 	                _didIteratorError2 = true;
