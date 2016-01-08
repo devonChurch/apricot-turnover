@@ -46,10 +46,10 @@
 
 	'use strict';
 	
-	var Hero = __webpack_require__(1);
+	var ApricotTurnover = __webpack_require__(1);
 	
 	// Pushing the class out to the Window object to setup demos in codepen.io.
-	window.apricotTurnover = Hero;
+	window.ApricotTurnover = ApricotTurnover;
 
 /***/ },
 /* 1 */
@@ -66,8 +66,8 @@
 	var Background = __webpack_require__(4);
 	var Glare = __webpack_require__(5);
 	
-	var Hero = (function () {
-	    function Hero() {
+	var Base = (function () {
+	    function Base() {
 	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
 	        var _ref$$wrapper = _ref.$wrapper;
@@ -81,7 +81,7 @@
 	        var _ref$glare = _ref.glare;
 	        var glare = _ref$glare === undefined ? {} : _ref$glare;
 	
-	        _classCallCheck(this, Hero);
+	        _classCallCheck(this, Base);
 	
 	        this.$wrapper = $wrapper;
 	        this.height = height;
@@ -94,7 +94,7 @@
 	        this.animate();
 	    }
 	
-	    _createClass(Hero, [{
+	    _createClass(Base, [{
 	        key: 'injectCanvas',
 	        value: function injectCanvas() {
 	
@@ -131,10 +131,10 @@
 	        }
 	    }]);
 	
-	    return Hero;
+	    return Base;
 	})();
 	
-	module.exports = Hero;
+	module.exports = Base;
 
 /***/ },
 /* 2 */
@@ -9455,12 +9455,13 @@
 	    // the (#0) color stop allocation (and generates a new random color). This
 	    // creates the infinite loop.
 	
-	    function Background(Hero, properties) {
+	    function Background(Base, properties) {
 	        _classCallCheck(this, Background);
 	
-	        this.Hero = Hero;
+	        this.Base = Base;
 	        this.properties = properties;
 	        this.speed = this.calculateSpeed();
+	        console.log(this.speed);
 	        this.stops = this.generateStops();
 	    }
 	
@@ -9501,14 +9502,14 @@
 	            // Builds the gradient with its persistent values kept throughout the
 	            // animation and injects it onto the canvas.
 	
-	            var ctx = this.Hero.ctx;
+	            var ctx = this.Base.ctx;
 	
 	            this.updateStops();
 	
 	            // Resets the blends mode to default.
 	            ctx.globalCompositeOperation = 'source-over';
 	            ctx.beginPath();
-	            ctx.rect(0, 0, this.Hero.width, this.Hero.height);
+	            ctx.rect(0, 0, this.Base.width, this.Base.height);
 	            ctx.fillStyle = this.createGradient();
 	            ctx.fill();
 	            ctx.closePath();
@@ -9520,7 +9521,7 @@
 	            // Builds out the gradients color stops with their current x offset and
 	            // centres the gradient on the canvas.
 	
-	            var grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, 0, this.Hero.width * 3, 0);
+	            var grad = this.Base.ctx.createLinearGradient(this.Base.width * -2, 0, this.Base.width * 3, 0);
 	
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
@@ -9603,7 +9604,7 @@
 	
 	            var speed = this.properties.speed || 100;
 	
-	            return this.Hero.Helper.findPercentage({ percentage: speed, of: 0.001 });
+	            return this.Base.Helper.findPercentage({ percentage: speed, of: 0.001 });
 	        }
 	    }, {
 	        key: 'transitionStops',
@@ -9657,7 +9658,7 @@
 	            var base = properties.base || 340;
 	            var offset = properties.offset || 50; // +/- offset
 	            var max = offset * 2;
-	            var randomise = this.Hero.Helper.randomise({ max: max });
+	            var randomise = this.Base.Helper.randomise({ max: max });
 	            var hue = base - offset + randomise;
 	
 	            // Note: we do not put a hard stop to the min and max values - instead
@@ -9676,7 +9677,7 @@
 	            var base = properties.base || 80;
 	            var offset = properties.offset || 20; // +/- offset
 	            var max = offset * 2;
-	            var randomise = this.Hero.Helper.randomise({ max: max });
+	            var randomise = this.Base.Helper.randomise({ max: max });
 	
 	            var saturation = base - offset + randomise;
 	
@@ -9693,7 +9694,7 @@
 	            var base = properties.base || 50;
 	            var offset = properties.offset || 10; // +/- offset
 	            var max = offset * 2;
-	            var randomise = this.Hero.Helper.randomise({ max: max });
+	            var randomise = this.Base.Helper.randomise({ max: max });
 	
 	            var luminosity = base - offset + randomise;
 	
@@ -9710,7 +9711,7 @@
 	            var base = properties.base || 1;
 	            var offset = properties.offset || 0; // +/- offset
 	            var max = offset * 2;
-	            var randomise = this.Hero.Helper.randomise({ max: max });
+	            var randomise = this.Base.Helper.randomise({ max: max });
 	
 	            var alpha = base - offset + randomise;
 	
@@ -9740,10 +9741,10 @@
 	var Ray = __webpack_require__(6);
 	
 	var Glare = (function () {
-	    function Glare(Hero, properties) {
+	    function Glare(Base, properties) {
 	        _classCallCheck(this, Glare);
 	
-	        this.Hero = Hero;
+	        this.Base = Base;
 	        this.properties = properties;
 	        this.instances = [];
 	        this.frequency = this.calculateFrequecy();
@@ -9751,9 +9752,30 @@
 	        this.i = 0; // Creation frequency
 	        this.j = 0; // Ray orientation
 	        this.createRay();
+	        this.fastForward();
 	    }
 	
 	    _createClass(Glare, [{
+	        key: 'fastForward',
+	        value: function fastForward() {
+	
+	            // When the canvas in first initialised and injected into the DOM there
+	            // are no Glare instances visible. Over time they populate the canvas
+	            // area based on their frequency and lifespan parameters. In order to
+	            // have an typical number of Gare instances on page load we “fast
+	            // forward” the animation loop on the Glare timeline before beginning
+	            // the true animation sequence managed via the requestAnimationFrame()
+	            // API.
+	
+	            // Build 5 Glare instances.
+	            var length = this.frequency * 5;
+	
+	            for (var i = 0; i < length; i += 1) {
+	
+	                this.animate();
+	            }
+	        }
+	    }, {
 	        key: 'animate',
 	        value: function animate() {
 	
@@ -9811,7 +9833,7 @@
 	
 	            var frequency = this.properties.frequency || 30;
 	
-	            return this.Hero.Helper.findPercentage({ percentage: frequency, of: this.Hero.height });
+	            return this.Base.Helper.findPercentage({ percentage: frequency, of: this.Base.height });
 	        }
 	    }, {
 	        key: 'calculateDepreciation',
@@ -9822,7 +9844,7 @@
 	            // should depreciate until it becomes transparent.
 	
 	            var lifespan = this.properties.lifespan || 100;
-	            var distance = this.Hero.Helper.findPercentage({ percentage: lifespan, of: this.Hero.height });
+	            var distance = this.Base.Helper.findPercentage({ percentage: lifespan, of: this.Base.height });
 	            var alpha = 1;
 	
 	            return alpha / distance;
@@ -9836,7 +9858,7 @@
 	            // incrementor.
 	
 	            var orientation = this.j % 2 ? 'left' : 'right';
-	            var ray = new Ray(this.Hero, this, orientation);
+	            var ray = new Ray(this.Base, this, orientation);
 	
 	            this.instances.push(ray);
 	            this.j += 1;
@@ -9870,13 +9892,13 @@
 	var $ = __webpack_require__(2);
 	
 	var Ray = (function () {
-	    function Ray(Hero, Glare, orientation) {
+	    function Ray(Base, Glare, orientation) {
 	        _classCallCheck(this, Ray);
 	
-	        this.Hero = Hero;
+	        this.Base = Base;
 	        this.Glare = Glare;
 	        this.orientation = orientation;
-	        this.anchor = orientation === 'left' ? 0 : this.Hero.width;
+	        this.anchor = orientation === 'left' ? 0 : this.Base.width;
 	        this.alpha = 1;
 	        this.light = this.lightProperties;
 	        this.dark = this.darkProperties;
@@ -9911,7 +9933,7 @@
 	            // instance that play to the light / dark strengths and their
 	            // relationship to the underlying colors.
 	
-	            var ctx = this.Hero.ctx;
+	            var ctx = this.Base.ctx;
 	            var modifier = this[type + 'Modifiers'];
 	
 	            this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
@@ -9920,9 +9942,9 @@
 	            // Sets the blend mode.
 	            ctx.globalCompositeOperation = this[type].blend;
 	            ctx.beginPath();
-	            ctx.moveTo(this.anchor, this.Hero.height);
+	            ctx.moveTo(this.anchor, this.Base.height);
 	            ctx.lineTo(this.anchor, this[type].y);
-	            ctx.lineTo(this[type].x, this.Hero.height);
+	            ctx.lineTo(this[type].x, this.Base.height);
 	            ctx.fillStyle = 'hsla(0, 0%, ' + this[type].luminosity + '%, ' + this.alpha * this[type].alpha + ')';
 	            ctx.fill();
 	            ctx.closePath();
@@ -9931,10 +9953,10 @@
 	        key: 'randomiseX',
 	        value: function randomiseX() {
 	
-	            var min = this.Hero.width * 0.25;
-	            var max = this.Hero.width;
+	            var min = this.Base.width * 0.25;
+	            var max = this.Base.width;
 	
-	            return this.Hero.Helper.randomise({ min: min, max: max });
+	            return this.Base.Helper.randomise({ min: min, max: max });
 	        }
 	    }, {
 	        key: 'lightProperties',
@@ -9944,8 +9966,8 @@
 	                blend: 'overlay',
 	                luminosity: 100,
 	                alpha: 0.2,
-	                x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
-	                y: this.Hero.height
+	                x: this.orientation === 'left' ? this.randomiseX() : this.Base.width - this.randomiseX(),
+	                y: this.Base.height
 	            };
 	        }
 	    }, {
@@ -9957,7 +9979,7 @@
 	                luminosity: 0,
 	                alpha: 0.07,
 	                x: this.light.x,
-	                y: this.Hero.height
+	                y: this.Base.height
 	            };
 	        }
 	    }, {

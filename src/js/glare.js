@@ -3,9 +3,9 @@ const Ray = require('./ray');
 
 const Glare = class {
 
-    constructor(Hero, properties) {
+    constructor(Base, properties) {
 
-        this.Hero = Hero;
+        this.Base = Base;
         this.properties = properties;
         this.instances = [];
         this.frequency = this.calculateFrequecy();
@@ -13,6 +13,28 @@ const Glare = class {
         this.i = 0; // Creation frequency
         this.j = 0; // Ray orientation
         this.createRay();
+        this.fastForward();
+
+    }
+
+    fastForward() {
+
+        // When the canvas in first initialised and injected into the DOM there
+        // are no Glare instances visible. Over time they populate the canvas
+        // area based on their frequency and lifespan parameters. In order to
+        // have an typical number of Gare instances on page load we “fast
+        // forward” the animation loop on the Glare timeline before beginning
+        // the true animation sequence managed via the requestAnimationFrame()
+        // API.
+
+        // Build 5 Glare instances.
+        const length = this.frequency * 5;
+
+        for (let i = 0; i < length; i += 1) {
+
+            this.animate();
+
+        }
 
     }
 
@@ -51,7 +73,7 @@ const Glare = class {
 
         const frequency = this.properties.frequency || 30;
 
-        return this.Hero.Helper.findPercentage({percentage: frequency, of: this.Hero.height});
+        return this.Base.Helper.findPercentage({percentage: frequency, of: this.Base.height});
 
     }
 
@@ -62,7 +84,7 @@ const Glare = class {
         // should depreciate until it becomes transparent.
 
         const lifespan = this.properties.lifespan || 100;
-        const distance = this.Hero.Helper.findPercentage({percentage: lifespan, of: this.Hero.height});
+        const distance = this.Base.Helper.findPercentage({percentage: lifespan, of: this.Base.height});
         const alpha = 1;
 
         return alpha / distance;
@@ -76,7 +98,7 @@ const Glare = class {
         // incrementor.
 
         const orientation = this.j % 2 ? 'left' : 'right';
-        const ray = new Ray(this.Hero, this, orientation);
+        const ray = new Ray(this.Base, this, orientation);
 
         this.instances.push(ray);
         this.j += 1;

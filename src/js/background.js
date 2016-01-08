@@ -24,11 +24,12 @@ const Background = class {
     // the (#0) color stop allocation (and generates a new random color). This
     // creates the infinite loop.
 
-    constructor(Hero, properties) {
+    constructor(Base, properties) {
 
-        this.Hero = Hero;
+        this.Base = Base;
         this.properties = properties;
         this.speed = this.calculateSpeed();
+        console.log(this.speed);
         this.stops = this.generateStops();
 
     }
@@ -69,14 +70,14 @@ const Background = class {
         // Builds the gradient with its persistent values kept throughout the
         // animation and injects it onto the canvas.
 
-        const ctx = this.Hero.ctx;
+        const ctx = this.Base.ctx;
 
         this.updateStops();
 
         // Resets the blends mode to default.
         ctx.globalCompositeOperation = 'source-over';
         ctx.beginPath();
-        ctx.rect(0, 0, this.Hero.width, this.Hero.height);
+        ctx.rect(0, 0, this.Base.width, this.Base.height);
         ctx.fillStyle = this.createGradient();
         ctx.fill();
         ctx.closePath();
@@ -88,7 +89,7 @@ const Background = class {
         // Builds out the gradients color stops with their current x offset and
         // centres the gradient on the canvas.
 
-        const grad = this.Hero.ctx.createLinearGradient(this.Hero.width * -2, 0, this.Hero.width * 3, 0);
+        const grad = this.Base.ctx.createLinearGradient(this.Base.width * -2, 0, this.Base.width * 3, 0);
 
         for (let stop of this.stops) {
 
@@ -154,7 +155,7 @@ const Background = class {
 
         const speed = this.properties.speed || 100;
 
-        return this.Hero.Helper.findPercentage({percentage: speed, of: 0.001});
+        return this.Base.Helper.findPercentage({percentage: speed, of: 0.001});
 
     }
 
@@ -188,7 +189,7 @@ const Background = class {
         const base = properties.base || 340;
         const offset = properties.offset || 50; // +/- offset
         const max = offset * 2;
-        const randomise = this.Hero.Helper.randomise({max});
+        const randomise = this.Base.Helper.randomise({max});
         let hue = base - offset + randomise;
 
         // Note: we do not put a hard stop to the min and max values - instead
@@ -207,7 +208,7 @@ const Background = class {
         const base = properties.base || 80;
         const offset = properties.offset || 20; // +/- offset
         const max = offset * 2;
-        const randomise = this.Hero.Helper.randomise({max});
+        const randomise = this.Base.Helper.randomise({max});
 
         let saturation = base - offset + randomise;
 
@@ -224,7 +225,7 @@ const Background = class {
         const base = properties.base || 50;
         const offset = properties.offset || 10; // +/- offset
         const max = offset * 2;
-        const randomise = this.Hero.Helper.randomise({max});
+        const randomise = this.Base.Helper.randomise({max});
 
         let luminosity = base - offset + randomise;
 
@@ -241,7 +242,7 @@ const Background = class {
         const base = properties.base || 1;
         const offset = properties.offset || 0; // +/- offset
         const max = offset * 2;
-        const randomise = this.Hero.Helper.randomise({max});
+        const randomise = this.Base.Helper.randomise({max});
 
         let alpha = base - offset + randomise;
 
