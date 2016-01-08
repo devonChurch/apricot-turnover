@@ -2,12 +2,12 @@ const $ = require('jquery');
 
 const Ray = class {
 
-    constructor(Hero, Glare, orientation) {
+    constructor(Base, Glare, orientation) {
 
-        this.Hero = Hero;
+        this.Base = Base;
         this.Glare = Glare;
         this.orientation = orientation;
-        this.anchor = orientation === 'left' ? 0 : this.Hero.width;
+        this.anchor = orientation === 'left' ? 0 : this.Base.width;
         this.alpha = 1;
         this.light = this.lightProperties;
         this.dark = this.darkProperties;
@@ -41,7 +41,7 @@ const Ray = class {
         // instance that play to the light / dark strengths and their
         // relationship to the underlying colors.
 
-        const ctx = this.Hero.ctx;
+        const ctx = this.Base.ctx;
         const modifier = this[`${type}Modifiers`];
 
         this[type].x = this.orientation === 'left' ? this[type].x + modifier.x : this[type].x - modifier.x;
@@ -50,9 +50,9 @@ const Ray = class {
         // Sets the blend mode.
         ctx.globalCompositeOperation = this[type].blend;
         ctx.beginPath();
-        ctx.moveTo(this.anchor, this.Hero.height);
+        ctx.moveTo(this.anchor, this.Base.height);
         ctx.lineTo(this.anchor, this[type].y);
-        ctx.lineTo(this[type].x, this.Hero.height);
+        ctx.lineTo(this[type].x, this.Base.height);
         ctx.fillStyle = `hsla(0, 0%, ${this[type].luminosity}%, ${this.alpha * this[type].alpha})`;
         ctx.fill();
         ctx.closePath();
@@ -65,8 +65,8 @@ const Ray = class {
             blend: 'overlay',
             luminosity: 100,
             alpha: 0.2,
-            x: this.orientation === 'left' ? this.randomiseX() : this.Hero.width - this.randomiseX(),
-            y: this.Hero.height
+            x: this.orientation === 'left' ? this.randomiseX() : this.Base.width - this.randomiseX(),
+            y: this.Base.height
         };
 
     }
@@ -78,7 +78,7 @@ const Ray = class {
             luminosity: 0,
             alpha: 0.07,
             x: this.light.x,
-            y: this.Hero.height
+            y: this.Base.height
         };
 
     }
@@ -103,10 +103,10 @@ const Ray = class {
 
     randomiseX() {
 
-        const min = this.Hero.width * 0.25;
-        const max = this.Hero.width;
+        const min = this.Base.width * 0.25;
+        const max = this.Base.width;
 
-        return this.Hero.Helper.randomise({min, max});
+        return this.Base.Helper.randomise({min, max});
 
     }
 

@@ -3,7 +3,7 @@ const Helper = require('./helper');
 const Background = require('./background');
 const Glare = require('./glare');
 
-const Hero = class {
+const Base = class {
 
     constructor({$wrapper = $('body'), height = 500, width = 1000, background = {}, glare = {}} = {}) {
 
@@ -53,4 +53,4 @@ const Hero = class {
 
 };
 
-module.exports = Hero;
+module.exports = Base;

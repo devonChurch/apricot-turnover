@@ -3,9 +3,9 @@ const Ray = require('./ray');
 
 const Glare = class {
 
-    constructor(Hero, properties) {
+    constructor(Base, properties) {
 
-        this.Hero = Hero;
+        this.Base = Base;
         this.properties = properties;
         this.instances = [];
         this.frequency = this.calculateFrequecy();
@@ -73,7 +73,7 @@ const Glare = class {
 
         const frequency = this.properties.frequency || 30;
 
-        return this.Hero.Helper.findPercentage({percentage: frequency, of: this.Hero.height});
+        return this.Base.Helper.findPercentage({percentage: frequency, of: this.Base.height});
 
     }
 
@@ -84,7 +84,7 @@ const Glare = class {
         // should depreciate until it becomes transparent.
 
         const lifespan = this.properties.lifespan || 100;
-        const distance = this.Hero.Helper.findPercentage({percentage: lifespan, of: this.Hero.height});
+        const distance = this.Base.Helper.findPercentage({percentage: lifespan, of: this.Base.height});
         const alpha = 1;
 
         return alpha / distance;
@@ -98,7 +98,7 @@ const Glare = class {
         // incrementor.
 
         const orientation = this.j % 2 ? 'left' : 'right';
-        const ray = new Ray(this.Hero, this, orientation);
+        const ray = new Ray(this.Base, this, orientation);
 
         this.instances.push(ray);
         this.j += 1;
