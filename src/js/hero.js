@@ -24,9 +24,9 @@ const Hero = class {
         // Place the canvas into the DOM inside the stipulated wrapper element
         // or the default location.
 
-        const $canvas = $(`<canvas class="hero__canvas" height="${this.height}" width="${this.width}" />`);
+        const $canvas = $(`<canvas class="apricot-turnover" height="${this.height}" width="${this.width}" />`);
 
-        this.$wrapper.prepend($canvas);
+        this.$wrapper.append($canvas);
 
         return $canvas;
 

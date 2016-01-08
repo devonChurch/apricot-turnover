@@ -28,6 +28,7 @@ const Background = class {
 
         this.Hero = Hero;
         this.properties = properties;
+        this.speed = this.calculateSpeed();
         this.stops = this.generateStops();
 
     }
@@ -146,13 +147,24 @@ const Background = class {
 
     }
 
+    calculateSpeed() {
+
+        // We take the users percentage based speed value and generate a
+        // reference that relates to the color stop offset for a canvas gradient.
+
+        const speed = this.properties.speed || 100;
+
+        return this.Hero.Helper.findPercentage({percentage: speed, of: 0.001});
+
+    }
+
     transitionStops() {
 
         // Move the gradient stops forward each animation tick.
 
         for (let stop of this.stops) {
 
-            stop.x += 0.001;
+            stop.x += this.speed;
 
         }
 
