@@ -1,4 +1,4 @@
-# apricot-turnover
+# Apricot Turnover
 
 A hero module using procedural color transitions.
 
