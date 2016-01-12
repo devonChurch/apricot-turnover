@@ -10,20 +10,17 @@ A hero module using procedural color transitions.
 ## Installation
 
 - Clone this repository
-
-```javascript
-git clone https://github.com/devonChurch/apricot-turnover.git
+```
+git clone https://github.com/devonChurch/teriyaki-unagi.git
 ```
 
 - Install project dependancies
-
-```javascript
+```
 npm install
 ```
 
 - Start up a [Webpack](https://webpack.github.io/docs/webpack-dev-server.html) development server at http://localhost:8080/webpack-dev-server/
-
-```javascript
+```
 npm start
 ```
 
