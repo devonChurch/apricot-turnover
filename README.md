@@ -11,7 +11,7 @@ A hero module using procedural color transitions.
 
 - Clone this repository
 ```
-git clone https://github.com/devonChurch/teriyaki-unagi.git
+git clone https://github.com/devonChurch/apricot-turnover.git
 ```
 
 - Install project dependancies
